@@ -1,0 +1,6 @@
+*.mat
+*.ogg
+*.wav
+data/*
+!data/.dummy.txt
+

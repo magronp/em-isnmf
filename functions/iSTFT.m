@@ -1,7 +1,7 @@
 function x = iSTFT(X, Nfft, hop, Nw, wtype)
 
 if nargin<5
-    wtype = 'hamming';
+    wtype = 'hann';
 end
 
 [F,T,J] = size(X);

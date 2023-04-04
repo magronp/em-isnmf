@@ -1,7 +1,7 @@
 function X = STFT(y, Nfft, hop, Nw, wtype)
 
 if nargin<5
-    wtype = 'hamming';
+    wtype = 'hann';
 end
 
 % y expected as column vector for each source, so L*J

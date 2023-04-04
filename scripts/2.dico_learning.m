@@ -1,11 +1,11 @@
 clear all; close all; clc;
-set_params;
+global_setup;
 
-isdiv = zeros(Nd,3,2); timesec = zeros(Nd,3,2);
+loss_is_dic = zeros(Nd,3,2); time_dico = zeros(Nd,3,2);
 
 %%% Load dicos signals
-x1 = audioread('audio_files/dicos/dico1.wav')';
-x2 = audioread('audio_files/dicos/dico2.wav')';
+x1 = audioread(strcat(dico_path,'dico1.wav'))';
+x2 = audioread(strcat(dico_path,'dico2.wav'))';
 
 % STFTs and magnitude normalization
 F = Nw/2+1;
@@ -25,16 +25,15 @@ for k=1:Nd
     
     fprintf('MUR \n');
     [W1,~,is,tim] = isnmf_ML_MUR(V1,Ndico,Wini,Hini);
-    isdiv(k,1,1) = is(end); timesec(k,1,1) = tim(end);
+    loss_is_dic(k,1,1) = is(end); time_dico(k,1,1) = tim(end);
     
     fprintf('SAGE \n');
     [~,~,is,tim] = isnmf_SAGE(V1, Ndico, Wini, Hini);
-    isdiv(k,2,1) = is(end); timesec(k,2,1) = tim(end);
+    loss_is_dic(k,2,1) = is(end); time_dico(k,2,1) = tim(end);
     
     fprintf('EM \n');
     [~,~,is,tim] = isnmf_EM(V1, Ndico, Wini, Hini);
-    isdiv(k,3,1) = is(end); timesec(k,3,1) = tim(end);
-    
+    loss_is_dic(k,3,1) = is(end); time_dico(k,3,1) = tim(end);
     
     % Speaker 2
     fprintf('Speaker 2 \n');
@@ -42,23 +41,23 @@ for k=1:Nd
     
     fprintf('MUR \n');
     [W2,~,is,tim] = isnmf_ML_MUR(V2,Ndico,Wini,Hini);
-    isdiv(k,1,2) = is(end); timesec(k,1,2) = tim(end);
+    loss_is_dic(k,1,2) = is(end); time_dico(k,1,2) = tim(end);
     
     fprintf('SAGE \n');
     [~,~,is,tim] = isnmf_SAGE(V2, Ndico, Wini, Hini);
-    isdiv(k,2,2) = is(end); timesec(k,2,2) = tim(end);
+    loss_is_dic(k,2,2) = is(end); time_dico(k,2,2) = tim(end);
     
     fprintf('EM \n');
     [~,~,is,tim] = isnmf_EM(V2, Ndico, Wini, Hini);
-    isdiv(k,3,2) = is(end); timesec(k,3,2) = tim(end);    
+    loss_is_dic(k,3,2) = is(end); time_dico(k,3,2) = tim(end);    
     
     % Full dico
     W = [W1 W2];
-    save(strcat('dictionaries/dico_',int2str(K),'.mat'),'W');
+    save(strcat(out_path,'dico_',int2str(K),'.mat'),'W');
     
 end
 
 
 %%% Save IS and time
-save('metrics/dico_is_time.mat','isdiv','timesec');
+save(strcat(out_path,'dico_learning.mat'),'loss_is_dic','time_dico');
 
